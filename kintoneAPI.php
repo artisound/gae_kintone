@@ -1,6 +1,6 @@
 <?php
 
-class tcLibKintone {
+class kintoneAPI {
 
   /*************************************************************************/
   /* メンバ変数(プロパティ)                                                */
@@ -8,6 +8,7 @@ class tcLibKintone {
   protected $subdomain;
   protected $login_id;
   protected $password;
+  protected $api;
 
   /*************************************************************************/
   /* コンストラクタ                                                        */
@@ -22,7 +23,7 @@ class tcLibKintone {
   /* メソッド                                                              */
   /*************************************************************************/
   private function kintoneAPI_init() {
-    return new \CybozuHttp\Api\KintoneApi(new \CybozuHttp\Client([
+    $this->api = new \CybozuHttp\Api\KintoneApi(new \CybozuHttp\Client([
       'domain'    => 'cybozu.com',
       'subdomain' => $this->subdomain,
       'login'     => $this->login_id,
@@ -34,38 +35,40 @@ class tcLibKintone {
   // レコード情報を取得する
   //  - カーソルを使ったレコード取得
   // -----------------------------------------------------------------------
-  public function cursorAll ($appId, $query, $pFields = null) {
-      // GET
-      $api = $this->kintoneAPI_init();
-
-      $query = $query;
-
+  /** ********************************************************************************************************************************************************
+   * レコード情報を取得
+   * - 101件以上
+   * @param int    - $appId  - アプリID
+   * @param string - $query  - kintoneクエリ記法
+   * @param array  - $fields - フィールドコードの配列
+   * @return void
+   ******************************************************************************************************************************************************** */
+  public function cursorAll ($appId, $query = null, $fields = null) {
+    try {
       // API実行
-      try {
-          if($pFields){
-              $ret = $api->cursor()->all($appId, $query, $pFields);
-          } else {
-              $ret = $api->cursor()->all($appId, $query);
-          }
-          return $ret;
-      } catch (Exception $e) {
-          // APIエラー時
-          die($e->getMessage());
-
-          // 時刻を指定
-          $log_time = date('Y-m-d H:i:s');
-          error_log('['.$log_time.'] '.print_r($e->getMessage(),true).PHP_EOL, 3, $log);
-
+      if($fields){
+        return $this->api->cursor()->all($appId, $query, $fields);
+      } else {
+        return $this->api->cursor()->all($appId, $query);
       }
-
-//        return $ret;
+    } catch (Exception $e) {
+      // APIエラー時
+      die($e->getMessage());
+    }
   }
 
 
   // -----------------------------------------------------------------------
   // レコード情報を取得する
   //  - カーソルを使ったレコード取得
-  // -----------------------------------------------------------------------
+  // -----------------------------------------------------------------------  
+  /** ********************************************************************************************************************************************************
+   * レコード情報を取得する
+   * - 
+   * @param  mixed $appId
+   * @param  mixed $query
+   * @return void
+   ******************************************************************************************************************************************************** */
   public function getRecords ($appId, $query) {
       // GET
       $api = $this->kintoneAPI_init();

@@ -6,9 +6,8 @@ include_once('./sendMail.php');
 $dotenv = new Dotenv\Dotenv(__DIR__);
 $dotenv->load();
 
-$kintone = new \CybozuHttp\Api\KintoneApi(new \CybozuHttp\Client([
-  'domain'    => 'cybozu.com',
-  'subdomain' => getenv('KINTONE_SUBDOMAIN'),
-  'login'     => getenv('KINTONE_LOGIN_ID'),
-  'password'  => getenv('KINTONE_PASSWORD'),
-]));
+$kintone = new kintoneAPI(
+  getenv('KINTONE_SUBDOMAIN'),
+  getenv('KINTONE_LOGIN_ID'),
+  getenv('KINTONE_PASSWORD')
+);

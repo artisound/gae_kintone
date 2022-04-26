@@ -17,15 +17,15 @@ try {
   $mailer->isSMTP();
   $mailer->CharSet    = 'UTF-8';
   $mailer->SMTPDebug  = 1;
-  $mailer->Host       = 'sv8214.xserver.jp';  //SMTPサーバを入れます
   $mailer->SMTPAuth   = true;
-  $mailer->Username   = 'noreply@digital-town.jp';  //SMTP user を入れます
-  $mailer->Password   = '131kouj|';      // SMTP password を入れます
-  $mailer->SMTPSecure = 'ssl';          // "ssl"にします
-  $mailer->Port       = 465;             // 465を使います
+  $mailer->SMTPSecure = 'ssl';
+  $mailer->Port       = 465;
+  $mailer->Host       = getenv('EMAIL_HOSTNAME');  //SMTPサーバ名
+  $mailer->Username   = getenv('EMAIL_USERNAME');  // SMTP username
+  $mailer->Password   = getenv('EMAIL_PASSWORD');  // SMTP password
 
   //送信者や宛先の設定
-  $mailer->setFrom('k.nishizoe@timeconcier.jp', mb_encode_mimeheader('送信者'));
+  $mailer->setFrom(getenv('EMAIL_FROM'), mb_encode_mimeheader('送信者'));
   $mailer->addAddress('k.nishizoe131@gmail.com');//送り先
 
   //メール内容
