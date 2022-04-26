@@ -1,0 +1,6 @@
+service: digitown-paidplan-sendmail
+runtime: php74
+handlers:
+- url: /.+\.php
+  script: auto
+  secure: always
